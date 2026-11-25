@@ -1,0 +1,89 @@
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--sky);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3, h4, p { margin: 0; }
+
+.pixel { font-family: var(--font-pixel); line-height: 1.5; letter-spacing: 0.02em; }
+.retro { font-family: var(--font-retro); line-height: 1.2; }
+.muted { color: var(--muted); }
+
+.container {
+  width: 100%;
+  max-width: calc(var(--page-max) + var(--gutter) * 2);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -60px;
+  z-index: 100;
+  background: var(--yellow);
+  border: var(--border-thin);
+  padding: 10px 14px;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  text-decoration: none;
+}
+.skip-link:focus { top: 8px; }
+
+:focus-visible {
+  outline: 3px dashed var(--blue);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Section bands */
+.band { position: relative; padding: clamp(48px, 7vw, 74px) 0; }
+.band--sky { background: var(--sky); }
+.band--cream { background: var(--cream); }
+.band--green { background: var(--green); }
+.band--red { background: var(--red); }
+.band--navy { background: var(--navy); color: var(--white); }
+.band--white { background: var(--white); }
+/* A sky band whose bottom part turns cream, like the Figma page frames. */
+.band--split { background: linear-gradient(to bottom, var(--sky) 0 calc(100% - var(--split, 120px)), var(--cream) 0); }
+.band--split-red { background: linear-gradient(to bottom, var(--sky) 0 calc(100% - var(--split, 120px)), var(--red) 0); }
+
+.section-title {
+  font-family: var(--font-pixel);
+  font-size: clamp(17px, 2.6vw, 28px);
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: clamp(28px, 5vw, 52px);
+}
+.section-title--left { text-align: left; }
+.section-title--white { color: var(--white); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

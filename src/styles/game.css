@@ -1,0 +1,110 @@
+/* ===== Home mini-game: walk, jump and hit a block to enter a world ===== */
+.game { border: var(--border); background: var(--white); }
+.game__stage {
+  --ground: 64px;
+  position: relative; height: 400px; overflow: hidden;
+  background: var(--sky);
+  touch-action: pan-y;
+}
+.game__world { position: absolute; left: 0; top: 0; bottom: 0; will-change: transform; }
+
+.game__ground {
+  position: absolute; left: 0; right: 0; bottom: 0; height: var(--ground);
+  background-color: var(--brick);
+  background-image:
+    linear-gradient(var(--ink) 0 3px, transparent 3px),
+    repeating-linear-gradient(90deg, transparent 0 46px, rgba(32, 38, 50, 0.55) 46px 48px),
+    linear-gradient(transparent 0 30px, rgba(32, 38, 50, 0.55) 30px 32px, transparent 32px);
+  background-size: 100% 100%, 48px 32px, 100% 32px;
+  border-top: 6px solid var(--green);
+}
+
+.game__player { position: absolute; left: 0; bottom: var(--ground); z-index: 3; will-change: transform; }
+.sprite--game { width: 40px; height: 70px; }
+
+/* Scenery — simple pixel shapes, all original. */
+.cloud { position: absolute; width: 96px; height: 32px; background: var(--white); box-shadow: 16px -16px 0 var(--white), 48px -16px 0 var(--white), 0 0 0 3px var(--white); border: 0; }
+.cloud::after { content: ''; position: absolute; left: 16px; top: -16px; width: 48px; height: 16px; background: var(--white); }
+.cloud--1 { left: 90px; top: 34px; animation: drift 9s steps(9, end) infinite alternate; }
+.cloud--2 { left: 560px; top: 26px; transform: scale(0.8); animation: drift 12s steps(12, end) infinite alternate-reverse; }
+.cloud--3 { left: 1040px; top: 40px; animation: drift 10s steps(10, end) infinite alternate; }
+@keyframes drift { to { translate: 36px 0; } }
+
+.hill { position: absolute; bottom: var(--ground); background: #7fd18e; border: 3px solid var(--ink); border-bottom: 0;
+  clip-path: polygon(0 100%, 0 60%, 15% 60%, 15% 35%, 30% 35%, 30% 15%, 70% 15%, 70% 35%, 85% 35%, 85% 60%, 100% 60%, 100% 100%); }
+.hill--1 { left: 30px; width: 180px; height: 90px; }
+.hill--2 { left: 780px; width: 240px; height: 120px; background: #6cc47c; }
+
+.game__sign {
+  position: absolute; left: 92px; bottom: calc(var(--ground) + 96px);
+  background: var(--white); border: var(--border); padding: 6px 8px; font-size: 9px;
+}
+.game__sign::after { content: ''; position: absolute; left: 50%; top: 100%; width: 6px; height: 70px; background: var(--brick); border: 2px solid var(--ink); border-top: 0; }
+
+/* Blocks */
+.block-slot { position: absolute; top: 0; bottom: 0; }
+.qblock {
+  position: absolute; left: 0; padding: 0; z-index: 2; cursor: pointer;
+  background: var(--yellow); border: 3px solid var(--ink);
+  box-shadow: inset -5px -5px 0 #e0a800, inset 5px 5px 0 #ffe27a;
+  display: flex; align-items: center; justify-content: center;
+  animation: float 1.8s steps(3, end) infinite;
+}
+.qblock::before, .qblock::after { content: ''; position: absolute; width: 4px; height: 4px; background: var(--ink); top: 4px; left: 4px; box-shadow: 40px 0 0 var(--ink), 0 40px 0 var(--ink), 40px 40px 0 var(--ink); }
+.qblock::after { display: none; }
+.block-slot:nth-child(even) .qblock { animation-delay: 0.3s; }
+.qblock img { position: relative; image-rendering: pixelated; }
+.qblock:hover, .qblock:focus-visible { background: #ffd851; }
+.qblock--hit { animation: bump 0.32s steps(4, end) both; background: var(--brick); box-shadow: inset -5px -5px 0 #74401f, inset 5px 5px 0 #b96a40; }
+.qblock--hit img { opacity: 0.45; }
+@keyframes float { 50% { transform: translateY(-3px); } }
+@keyframes bump { 40% { transform: translateY(-16px); } 100% { transform: translateY(0); } }
+
+.coin {
+  position: absolute; left: 50%; width: 20px; height: 28px; margin-left: -10px; z-index: 1;
+  background: var(--yellow); border: 3px solid var(--ink); border-radius: 0;
+  box-shadow: inset 4px 0 0 #fff1b0;
+  animation: coin 0.7s steps(7, end) both;
+}
+@keyframes coin { 0% { transform: translateY(0) scaleX(1); opacity: 1; } 50% { transform: translateY(-70px) scaleX(0.3); } 100% { transform: translateY(-90px) scaleX(1); opacity: 0; } }
+
+.block-label {
+  position: absolute; left: 50%; translate: -50% 0; z-index: 2;
+  padding: 6px 7px 5px; background: var(--white); border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  font-size: 9px; line-height: 1; white-space: nowrap; pointer-events: none;
+  animation: float 1.8s steps(3, end) infinite;
+}
+.block-label::after { content: ''; position: absolute; left: 50%; top: 100%; margin-left: -4px; border: 4px solid transparent; border-top-color: var(--ink); }
+.block-slot:nth-child(even) .block-label { animation-delay: 0.3s; }
+.block-label--hit { background: var(--yellow); }
+
+/* Controls */
+.game__controls {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  padding: 12px 18px; border-top: var(--border); background: var(--cream);
+}
+.game__hint { font-size: 22px; }
+.game__pad { display: flex; gap: 10px; }
+.pad-btn {
+  width: 56px; height: 48px; border: var(--border); background: var(--white); cursor: pointer;
+  font-family: var(--font-pixel); font-size: 14px; user-select: none; -webkit-user-select: none; touch-action: none;
+}
+.pad-btn:active { background: var(--yellow); transform: translateY(2px); }
+.pad-btn--jump { width: auto; padding: 0 16px; background: var(--red); color: var(--white); font-size: 11px; }
+
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
+  .game__pad { display: none; }
+}
+@media (max-width: 900px) {
+  .game__hint-keys { display: none; }
+}
+@media (max-width: 600px) {
+  .game__stage { height: 320px; }
+  .game__controls { justify-content: center; text-align: center; }
+  .pad-btn { width: 64px; height: 56px; }
+  .pad-btn--jump { width: auto; padding: 0 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qblock, .cloud { animation: none; }
+}

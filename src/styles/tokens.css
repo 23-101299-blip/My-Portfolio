@@ -1,0 +1,38 @@
+/* Design tokens — the Mario colour palette from the Figma file. */
+:root {
+  /* Backgrounds */
+  --cream: #f5f1e8;      /* Main background */
+  --sky: #ddf3ff;        /* Secondary background */
+  --navy: #18243a;       /* Dark section background */
+  /* Actions & accents */
+  --red: #e83b32;        /* Primary CTA */
+  --blue: #2878d0;       /* Links / secondary actions */
+  --yellow: #ffc928;     /* Badges / small highlights */
+  --green: #38a852;      /* Success / accent */
+  --brick: #9b542f;      /* Small decorative detail */
+  /* Text */
+  --ink: #202632;        /* Primary text + outlines */
+  --muted: #626b76;      /* Secondary text */
+  --white: #ffffff;      /* Cards / text on dark */
+  --shadow: #101820;
+
+  /* Type */
+  --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+  --font-retro: 'VT323', 'Courier New', monospace;
+  --font-body: 'Poppins', system-ui, sans-serif;
+
+  /* Layout */
+  --page-max: 1178px;
+  --gutter: clamp(16px, 4vw, 51px);
+  --border: 3px solid var(--ink);
+  --border-thin: 2px solid var(--ink);
+  --nav-h: 101px;
+
+  /* Motion */
+  --ease-pixel: steps(4, end);
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (max-width: 900px) {
+  :root { --nav-h: 72px; }
+}
