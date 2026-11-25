@@ -2,11 +2,12 @@
   "name": "aly-gameel-portfolio",
   "version": "1.0.0",
   "private": true,
-  "description": "Aly Gameel — retro pixel game portfolio built with React and Webpack",
+  "description": "Aly Gameel â€” retro pixel game portfolio built with React and Webpack",
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
-    "optimize-images": "node tools/optimize-images.js"
+    "optimize-images": "node tools/optimize-images.js",
+    "deploy": "node tools/deploy.js"
   },
   "browserslist": [
     "defaults"
